@@ -24,6 +24,9 @@ namespace Habbes.Sperse.SampleApp
                 {
                     var tree = parse.Parse();
                     Console.WriteLine(tree);
+                    var codeGen = new CodeGenerator(tree);
+                    var method = codeGen.Compile();
+                    Console.WriteLine("Result on x := 2: {0}", method(2));
                 }
                 catch (Exception e)
                 {

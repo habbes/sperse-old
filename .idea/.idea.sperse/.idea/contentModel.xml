@@ -13,6 +13,8 @@
       <e p="src" t="Include">
         <e p="Habbes.Sperse.Compiler" t="IncludeRecursive">
           <e p="bin" t="ExcludeRecursive" />
+          <e p="Builtins.cs" t="Include" />
+          <e p="CodeGenerator.cs" t="Include" />
           <e p="Compiler.cs" t="Include" />
           <e p="Habbes.Sperse.Compiler.csproj" t="IncludeRecursive" />
           <e p="ISyntaxTree.cs" t="Include" />
