@@ -56,7 +56,7 @@ namespace Habbes.Sperse.Compiler.Tests
         [Fact]
         public void GetTokensReturnsTokensFromSource()
         {
-            string src = "add(one, two)";
+            string src = "add(one, 1)";
             var lexer = new Lexer(src);
             var tokens = lexer.GetTokens();
 
@@ -65,10 +65,27 @@ namespace Habbes.Sperse.Compiler.Tests
                 new Token("add", TokenType.Identifier),
                 new Token("(", TokenType.OpenParen),
                 new Token("one", TokenType.Identifier),
-                new Token("two", TokenType.Identifier),
-                new Token(")", TokenType.CloseParen)
+                new Token("1", TokenType.IntConstant),
+                new Token(")", TokenType.CloseParen),
+                new Token(null, TokenType.Eof)
             };
             Assert.True(tokens.SequenceEqual<Token>(expected));
+        }
+
+        [Fact]
+        public void GetTokensThrowsExceptionOnInvalidToken()
+        {
+            string src = "add(one<, two)";
+            var lexer = new Lexer(src);
+            try
+            {
+                lexer.GetTokens().ToList();
+                throw new Exception("should fail");
+            }
+            catch (Exception e)
+            {
+                Assert.Equal("Invalid syntax at '<, two)'", e.Message);
+            }
         }
     }
 }

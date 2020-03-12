@@ -12,6 +12,28 @@ namespace Habbes.Sperse.SampleApp
 
             Console.WriteLine("Result of double 10 = {0}", db(10));
             Console.WriteLine("Result of quadruple 10 = {0}", quad(10));
+
+            string input = "";
+            Console.WriteLine("Enter expression (exit to quit):");
+            input = Console.ReadLine();
+            while (input != "exit")
+            {
+                var lexer = new Lexer(input);
+                var parse = new Parser(lexer.GetTokenStream());
+                try
+                {
+                    var tree = parse.Parse();
+                    Console.WriteLine(tree);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error {e}");
+                }
+                
+                Console.WriteLine("Enter expression (exit to quit):");
+                input = Console.ReadLine();
+            }
+            
         }
     }
 }
