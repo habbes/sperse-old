@@ -9,16 +9,16 @@ namespace Habbes.Sperse.Compiler
     public class CodeGenerator
     {
         private ISyntaxTree root;
-        private DynamicMethod method;
+        private DynamicMethod compiledMethod;
         private ILGenerator il;
         
         public CodeGenerator(ISyntaxTree root)
         {
             this.root = root;
-            method = new DynamicMethod("Sample",
+            compiledMethod = new DynamicMethod("Sample",
                 typeof(int),
                 new[] {typeof(int)});
-            il = method.GetILGenerator();
+            il = compiledMethod.GetILGenerator();
         }
 
         public Func<int, int> Compile()
@@ -35,12 +35,12 @@ namespace Habbes.Sperse.Compiler
                     throw new Exception("Invalid expression");
             }
             il.Emit(OpCodes.Ret);
-            return method.CreateDelegate(typeof(Func<int, int>)) as Func<int, int>;
+            return compiledMethod.CreateDelegate(typeof(Func<int, int>)) as Func<int, int>;
         }
-        
+
         private void CompileCall(ISyntaxTree tree)
         {
-            var callee = typeof(Builtins).GetMethod(tree.Token.Value);
+            var callee = GetMethod(tree.Token.Value, tree.Children.Count());
             foreach (var child in tree.Children)
             {
                 if (child.Token.Type == TokenType.Identifier)
@@ -71,7 +71,39 @@ namespace Habbes.Sperse.Compiler
 
             il.Emit(OpCodes.Ldarg_0);
         }
-        
+
+        private MethodInfo GetMethod(string name, int numArgs)
+        {
+            var method = typeof(Builtins).GetMethod(name);
+            if (method != null)
+            {
+                return method;
+            }
+
+            var nameParts = name.Split('.');
+            var typeName = string.Join('.', nameParts.SkipLast(1));
+            var methodName = nameParts.TakeLast(1).First();
+            var paramTypes = new Type[numArgs];
+            for (int i = 0; i < numArgs; i++)
+            {
+                paramTypes[i] = typeof(int);
+            }
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+
+                var type = assembly.GetType(typeName);
+                if (type != null)
+                {
+                    method = type.GetMethod(methodName, paramTypes);
+                    if (method != null)
+                    {
+                        return method;
+                    }
+                }
+            }
+            
+            throw new Exception($"Unknown method {name}");
+        }
         
     }
 }

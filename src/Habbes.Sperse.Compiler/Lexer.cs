@@ -14,7 +14,7 @@ namespace Habbes.Sperse.Compiler
             (new Regex(@"^,"), TokenType.Comma),
             (new Regex(@"^\("), TokenType.OpenParen),
             (new Regex(@"^\)"), TokenType.CloseParen),
-            (new Regex(@"^[a-zA-Z]+"), TokenType.Identifier),
+            (new Regex(@"^[a-zA-Z\.]+"), TokenType.Identifier),
             (new Regex(@"^[1-9]\d*"), TokenType.IntConstant)
         };
 

@@ -3,24 +3,14 @@ using System.Reflection.Emit;
 
 namespace Habbes.Sperse.Compiler
 {
-    public class Compiler
+    public class SperseCompiler
     {
-        public static Func<int, int> GenerateMethod(string name, int multiplier)
+        public Delegate Compile(string source)
         {
-            var method = new DynamicMethod(
-                name,
-                typeof(int),
-                new[] { typeof(int) });
-
-            var il = method.GetILGenerator();
-
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldc_I4, multiplier);
-            il.Emit(OpCodes.Mul);
-            il.Emit(OpCodes.Ret);
-
-            var fn = method.CreateDelegate(typeof(Func<int, int>)) as Func<int, int>;
-            return fn;
+            var lexer = new Lexer(source);
+            var parser = new Parser(lexer.GetTokenStream());
+            var codeGen = new CodeGenerator(parser.Parse());
+            return codeGen.Compile();
         }
     }
 }
