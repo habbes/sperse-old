@@ -28,7 +28,6 @@ namespace Habbes.Sperse.Compiler
                 return tree;
             }
             
-            // check if has children
             if (!tokens.IsNextType(TokenType.OpenParen))
             {
                 return tree;

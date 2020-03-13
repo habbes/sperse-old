@@ -6,8 +6,8 @@ namespace SampleApi
     {
         public TestMethods()
         {
-            Method = x => x;
+            Execute = x => x;
         }
-        public Func<int, int> Method { get; set; }
+        public Func<int, int> Execute { get; set; }
     }
 }

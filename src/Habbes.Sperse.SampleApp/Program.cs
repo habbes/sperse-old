@@ -1,7 +1,7 @@
 ﻿using System;
 using Habbes.Sperse.Compiler;
 
-namespace Habbes.Sperse.SampleApp
+namespace SampleApp
 {
     class Program
     {
@@ -9,9 +9,9 @@ namespace Habbes.Sperse.SampleApp
         {
             var compiler = new SperseCompiler();
 
-            string input = "";
+
             Console.WriteLine("Enter expression (exit to quit):");
-            input = Console.ReadLine();
+            string input = Console.ReadLine();
             while (input != "exit")
             {
                 try
@@ -28,11 +28,6 @@ namespace Habbes.Sperse.SampleApp
                 input = Console.ReadLine();
             }
             
-        }
-        
-        public int SampleMethod(int x)
-        {
-            return x * 2;
         }
     }
 }
